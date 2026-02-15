@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SarayVerse ✨</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+    body {
+      background: radial-gradient(circle at top, #1c0030, #070012);
+      color: white;
+      overflow-x: hidden;
+      min-height: 100vh;
+      text-align: center;
+      padding: 40px 15px;
+      transition: 0.4s;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #ff6fff, 0 0 20px #ff6fff; }
+      to   { text-shadow: 0 0 10px #00eaff, 0 0 35px #00eaff; }
+    }
+
+    p {
+      margin: 10px auto;
+      max-width: 650px;
+      opacity: 0.9;
+      font-size: 1.05rem;
+    }
+
+    .container {
+      margin-top: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+
+    button {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      background: linear-gradient(90deg, #ff00d4, #00eaff);
+      color: white;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+      box-shadow: 0 0 20px rgba(255, 0, 212, 0.4);
+      min-width: 280px;
+    }
+
+    button:hover { transform: scale(1.05); }
+
+    .danger {
+      background: linear-gradient(90deg, #ff2d2d, #ff00d4);
+      box-shadow: 0 0 25px rgba(255, 60, 60, 0.5);
+    }
+
+    .card {
+      margin-top: 25px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 18px;
+      border-radius: 18px;
+      width: min(750px, 95%);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(0, 234, 255, 0.12);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0px); }
+    }
+
+    .hidden { display: none; }
+
+    .glitch {
+      font-size: 1.3rem;
+      color: #ff4cff;
+      font-weight: bold;
+      margin-top: 15px;
+      animation: glitch 0.15s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0,0); }
+      25% { transform: translate(2px,-2px); }
+      50% { transform: translate(-2px,2px); }
+      75% { transform: translate(2px,2px); }
+      100% { transform: translate(-2px,-2px); }
+    }
+
+    .final {
+      font-size: 1.2rem;
+      color: #ffd1ff;
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+
+    /* confetti/emojis */
+    .emoji {
+      position: fixed;
+      top: -40px;
+      font-size: 26px;
+      animation: fall linear forwards;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0.9;
+      }
+    }
+
+    /* shake effect */
+    .shake {
+      animation: shake 0.25s infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0,0); }
+      25% { transform: translate(6px, -3px); }
+      50% { transform: translate(-6px, 3px); }
+      75% { transform: translate(4px, 4px); }
+      100% { transform: translate(-4px, -4px); }
+    }
+
+    .countdown {
+      font-size: 1.3rem;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #00eaff;
+    }
+
+    /* ORACLE FULLSCREEN */
+    .oracleScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #2c004a, #05000a);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .oracleTitle {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px #ff00d4;
+    }
+
+    .oracleText {
+      max-width: 750px;
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .wheel {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 8px solid rgba(255,255,255,0.2);
+      box-shadow: 0 0 40px rgba(255,0,212,0.4);
+      background: conic-gradient(
+        #ff00d4,
+        #00eaff,
+        #ff00d4,
+        #00eaff,
+        #ff00d4,
+        #00eaff
+      );
+      margin-bottom: 15px;
+      transition: transform 3.5s cubic-bezier(.17,.67,.17,1);
+    }
+
+    .pointer {
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-bottom: 30px solid #fff;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 10px #00eaff);
+    }
+
+    .oracleCard {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 18px;
+      border-radius: 18px;
+      width: min(800px, 95%);
+      margin-top: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 25px rgba(0, 234, 255, 0.12);
+      text-align: left;
+      line-height: 1.6;
+    }
+
+    .oracleCard h2 {
+      margin-bottom: 10px;
+      color: #ffd1ff;
+    }
+
+    .oracleCard strong {
+      color: #00eaff;
+    }
+
+    .oracleBtn {
+      margin-top: 15px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(90deg, #ff00d4, #00eaff);
+      color: white;
+      min-width: 240px;
+      box-shadow: 0 0 20px rgba(255, 0, 212, 0.4);
+      transition: 0.2s;
+    }
+
+    .oracleBtn:hover {
+      transform: scale(1.05);
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      width: 250px;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🌌 SarayVerse ✨</h1>
+  <p>Bienvenida a un lugar donde pasan cosas raras… y donde Saray es básicamente un evento cósmico.</p>
+
+  <div class="container">
+    <button class="danger" onclick="doNotTouch()">🚫 NO TOCAR</button>
+    <button onclick="openOracle()">🔮 Consultar el Oráculo Saray</button>
+    <button onclick="unlockSecret()">💛 Desbloquear Mensaje Secreto</button>
+  </div>
+
+  <div id="output" class="card hidden"></div>
+  <div id="final" class="card hidden"></div>
+
+<script>
+  let touched = false;
+
+  const zodiacCards = [
+    {
+      name: "Carta: Venus en Llamas 🔥",
+      meaning: "Esta carta simboliza atracción real, deseo fuerte y conexión que no se borra aunque pase el tiempo.",
+      love: "Contigo significa que, aunque no se diga, hay algo entre nosotros que sigue vivo. No es drama, es química."
+    },
+    {
+      name: "Carta: Eclipse del Corazón 🌙",
+      meaning: "Representa una historia intensa que tuvo pausas, confusión y silencios… pero nunca se apagó del todo.",
+      love: "Contigo significa que esto no terminó por falta de amor, sino por momentos. Y lo bonito es que aún existe el 'y si…'."
+    },
+    {
+      name: "Carta: La Reina del Aura 👑",
+      meaning: "Esta carta aparece cuando una persona tiene un magnetismo brutal. Donde entra, se nota.",
+      love: "Contigo significa que tú siempre has tenido ese efecto en mí. Y aunque me haga el tranquilo, lo sé perfectamente."
+    },
+    {
+      name: "Carta: Destino Travieso 😈",
+      meaning: "Simboliza coincidencias, mensajes inesperados y reencuentros que parecen casualidad pero no lo son.",
+      love: "Contigo significa que el universo es un pesado… porque cada vez que intento olvidarte, me acuerdo más."
+    },
+    {
+      name: "Carta: El Abrazo Pendiente 🧸",
+      meaning: "Representa ternura, cariño sincero y la necesidad de volver a sentir seguridad en alguien.",
+      love: "Contigo significa que, aunque vayamos sin etiquetas, hay un cariño real. Y eso no se finge."
+    },
+    {
+      name: "Carta: La Estrella Rosa 💫",
+      meaning: "Simboliza esperanza, momentos bonitos por venir y la sensación de que algo bueno todavía puede pasar.",
+      love: "Contigo significa que no hace falta forzar nada… pero si un día coincidimos bien, puede ser muy bonito."
+    }
+  ];
+
+  function showOutput(text, glitch=false) {
+    const box = document.getElementById("output");
+    box.classList.remove("hidden");
+    box.innerHTML = glitch ? `<div class="glitch">${text}</div>` : `<p>${text}</p>`;
+  }
+
+  function spawnEmojis(amount=25) {
+    const emojis = ["💛","✨","💥","🌙","👑","😂","😈","💌","🛸","🔥","💫","🍦"];
+    for (let i = 0; i < amount; i++) {
+      const e = document.createElement("div");
+      e.classList.add("emoji");
+      e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      e.style.left = Math.random() * 100 + "vw";
+      e.style.animationDuration = (Math.random() * 2 + 2) + "s";
+      e.style.opacity = Math.random();
+      document.body.appendChild(e);
+
+      setTimeout(() => e.remove(), 4000);
+    }
+  }
+
+  function doNotTouch() {
+    if (touched) {
+      showOutput("😭 Saray, ya lo tocaste antes. No puedes des-tocar lo intocable.", true);
+      spawnEmojis(20);
+      return;
+    }
+
+    touched = true;
+    spawnEmojis(50);
+
+    document.body.classList.add("shake");
+
+    let count = 5;
+    showOutput("🚨 ALERTA: Has activado el modo caos. Autodestrucción en...", true);
+
+    const countdown = document.createElement("div");
+    countdown.classList.add("countdown");
+    countdown.innerText = count;
+    document.getElementById("output").appendChild(countdown);
+
+    const interval = setInterval(() => {
+      count--;
+      countdown.innerText = count;
+
+      if (count <= 0) {
+        clearInterval(interval);
+        document.body.classList.remove("shake");
+        showOutput("💥 BOOM. ERROR FATAL: Saray demasiado guapa para este sistema.", true);
+        spawnEmojis(80);
+      }
+    }, 700);
+  }
+
+  // ORACLE FULLSCREEN
+  function openOracle() {
+    spawnEmojis(50);
+
+    const oracleScreen = document.createElement("div");
+    oracleScreen.className = "oracleScreen";
+    oracleScreen.id = "oracleScreen";
+
+    oracleScreen.innerHTML = `
+      <div class="oracleTitle">🔮 ORÁCULO SARAY 🔮</div>
+      <div class="oracleText">
+        Has entrado en la dimensión prohibida...<br>
+        Aquí el universo decide tu carta del horóscopo 😌✨
+      </div>
+
+      <div class="pointer"></div>
+      <div class="wheel" id="wheel"></div>
+
+      <button class="oracleBtn" onclick="spinWheel()">🎰 Girar la Ruleta</button>
+
+      <div id="oracleResult" class="oracleCard hidden"></div>
+
+      <button class="oracleBtn" style="margin-top:20px;" onclick="closeOracle()">⬅️ Volver al SarayVerse</button>
+    `;
+
+    document.body.appendChild(oracleScreen);
+  }
+
+  function spinWheel() {
+    const wheel = document.getElementById("wheel");
+    const resultBox = document.getElementById("oracleResult");
+
+    resultBox.classList.add("hidden");
+    resultBox.innerHTML = "";
+
+    const randomDeg = Math.floor(Math.random() * 2000) + 2000;
+    wheel.style.transform = `rotate(${randomDeg}deg)`;
+
+    setTimeout(() => {
+      const card = zodiacCards[Math.floor(Math.random() * zodiacCards.length)];
+
+      resultBox.classList.remove("hidden");
+      resultBox.innerHTML = `
+        <h2>${card.name}</h2>
+        <p><strong>Significado:</strong> ${card.meaning}</p>
+        <p><strong>Lo que dice sobre nosotros:</strong> ${card.love}</p>
+        <p style="margin-top:10px; opacity:0.85;">
+          (El universo no falla... aunque sea un poco dramático 😭)
+        </p>
+      `;
+
+      spawnEmojis(40);
+    }, 3600);
+  }
+
+  function closeOracle() {
+    const screen = document.getElementById("oracleScreen");
+    if (screen) screen.remove();
+  }
+
+  // SECRET WITH BIRTHDATE
+  function unlockSecret() {
+    const final = document.getElementById("final");
+    final.classList.remove("hidden");
+
+    final.innerHTML = `
+      <h2>🔒 Mensaje Secreto</h2>
+      <p class="final">
+        Para desbloquear esto tienes que poner el día correcto...<br>
+        (pista: es el cumpleaños de alguien 😈)
+      </p>
+      <input id="codeInput" placeholder="Escribe el código..." maxlength="8"/>
+      <br>
+      <button style="margin-top:15px;" onclick="checkCode()">🔓 Desbloquear</button>
+      <div id="codeResult" style="margin-top:15px;"></div>
+    `;
+  }
+
+  function checkCode() {
+    const code = document.getElementById("codeInput").value.trim();
+    const res = document.getElementById("codeResult");
+
+    if (code === "13092003") {
+      spawnEmojis(120);
+      res.innerHTML = `
+        <h2 style="margin-top:10px; color:#00eaff;">🎉 CORRECTO 🎉</h2>
+        <p class="final" style="font-size:1.5rem; margin-top:15px;">
+          eres lo más bonito de todo el universo<br>
+          <strong style="color:#ffd1ff;">bomboncito mío</strong> 💛✨
+        </p>
+      `;
+    } else {
+      spawnEmojis(15);
+      res.innerHTML = `
+        <p style="color:#ff6fff; font-weight:bold;">
+          ❌ Código incorrecto... Saray, concéntrate 😭
+        </p>
+      `;
+    }
+  }
+</script>
+
+</body>
+</html>
